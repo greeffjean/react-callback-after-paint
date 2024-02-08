@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "publish:clean-dir": "cd ../react-callback-after-paint-ts && rm -rf ../react-callback-after-paint-ts/src",
     "publish:copy-assets": "npm run publish:clean-dir && cp -R ./src/hooks ../react-callback-after-paint-ts/src",
+    "publish:readme": "cd ../react-callback-after-paint-ts && rm -r ./README.md && cd ../ && cp ./README.MD ./react-callback-after-paint-ts",
     "publish": "npm run publish:copy-assets && cd ../react-callback-after-paint-ts && tsc"
   },
   "dependencies": {

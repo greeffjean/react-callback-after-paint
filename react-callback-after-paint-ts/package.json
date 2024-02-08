@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/greeffjean/react-callback-after-paint.git"
   },
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "react-hook",
     "run-after-pain",
