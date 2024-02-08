@@ -1,0 +1,26 @@
+{
+  "name": "react-callback-after-paint-ts",
+  "version": "1.0.0",
+  "description": "React hook that runs a sideEffect when the next frame has been painted by the browser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/greeffjean/react-callback-after-paint.git"
+  },
+  "keywords": [
+    "react-hook",
+    "run-after-pain",
+    "renering",
+    "sideEffect",
+    "typescript"
+  ],
+  "author": "NA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/greeffjean/react-callback-after-paint/issues"
+  },
+  "homepage": "https://github.com/greeffjean/react-callback-after-paint#readme"
+}
