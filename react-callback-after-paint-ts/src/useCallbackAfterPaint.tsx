@@ -12,18 +12,23 @@ function runAfterFramePaint(callback: () => void) {
     });
 }
 
+type DependencyList = readonly unknown[];
+
 type useCallbackAfterPaintProps = {
     markName?: string;
     enabled: boolean;
     cb?: () => void;
+    dependencies?: DependencyList;
 }
 
-export function useCallbackAfterPaint({ markName, enabled, cb }: useCallbackAfterPaintProps) {
+/** 
+* Only perform the log when the calling component has signaled it is
+* ready to log a meaningful visual update.
+* ---
+* @param {Object} args { `markName?: string`, `enabled: boolean`, `cb?: () => void`, `dependencies?: readonly unknown[]` }
+*/
+export function useCallbackAfterPaint({ markName, enabled, cb, dependencies = [] }: useCallbackAfterPaintProps) {
     useEffect(() => {
-        /**
-         * Only perform the log when the calling component has signaled it is
-         * ready to log a meaningful visual update.
-         */
         if (!enabled) {
             return;
         }
@@ -32,7 +37,7 @@ export function useCallbackAfterPaint({ markName, enabled, cb }: useCallbackAfte
         runAfterFramePaint(() => {
             // Set a performance mark shortly after the frame has been produced.
             performance.mark((markName ?? "MyPerformanceMark"));
-           if(cb) cb();
+            if (cb) cb();
         });
-    }, [markName, enabled])
+    }, [markName, enabled, ...dependencies])
 }

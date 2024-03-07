@@ -1,5 +1,23 @@
 # react-callback-after-paint
 
+### Table of contents
+1. Changelog
+2. Introduction
+3. Credits
+4. How this hook works
+
+### Changelog
+
+####  Version  `1.0.0` > `1.1.0` 
+
+- 1. Add optional argument `dependencies`, and unpack in `useEffect` dependencies array - `[markName, enabled, ...dependencies]`
+    2. Re-run your side-effects whenever dependencies change 
+
+`1.0.0` > `1.1.1`  
+
+- 1. Update README and CHANGELOG 
+    2. Introducing new argument - `dependencies`
+
 ### Introduction
 Hi my name is Jean, I am a React developer, I encountered a bug re race-condition rendering, wherein two components render side by side, one referencing the other, but the latter could take a bit long to render depending on network conditions and main-thread load. 
 
@@ -16,7 +34,7 @@ Big thank you to Joe Liccini, all credits go to Joe, I am publishing this packag
 ### How this hook works
 We can utilize the `requestAnimationFrame` and `MessageChannel APIs` to more accurately log when a DOM update is represented visually to the user.
 
-To do this, we will use the following helper function `<root>/src/hooks/useCallbackAfterPaint`: 
+To do this, we will use the following helper function: 
 
     /**
     * Runs `callback` shortly after the next browser Frame is produced.
@@ -34,23 +52,19 @@ To do this, we will use the following helper function `<root>/src/hooks/useCallb
 
 With our new helper setup, we can integrate it into a re-usable React Hook:
 
-    function useMarkFramePaint({ markName, enabled }) {
+    function useCallbackAfterPaint({ markName, enabled, cb, dependencies = [] }) {
         useEffect(() => {
-            /**
-            * Only perform the log when the calling component has signaled it is
-            * ready to log a meaningful visual update.
-            */
             if (!enabled) {
                 return;
             }
-
             // Queues a requestAnimationFrame and onmessage
             runAfterFramePaint(() => {
                 // Set a performance mark shortly after the frame has been produced.
-                performance.mark(markName);
+                performance.mark((markName !== null && markName !== void 0 ? markName : "MyPerformanceMark"));
+                if (cb)
+                    cb();
             });
-        }, [markName, enabled])
-    }
+    }, [markName, enabled, ...dependencies]);
 
 In your Component, we can use this hook like this:
 
@@ -61,7 +75,9 @@ In your Component, we can use this hook like this:
             * Signal to the hook that we want to capture the frame right after our item list
             * model is populated.
             */
-            enabled: !!props.items?.length
+            enabled: !!props.items?.length,
+            cb: () => window.alert("I am a callback!"),
+            dependencies: [ <someState> ]
         });
 
         return (
